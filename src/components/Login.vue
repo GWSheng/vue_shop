@@ -60,7 +60,6 @@ export default {
       this.$refs.loginFormRef.validate(async (valid, obj) => { // 参数validate为返回的验证结果值，Boolean类型，obj为哪个验证规则出错了
         if (!valid) return
         const { data: res } = await this.$http.post('login', this.login_form)
-        console.log(this)
         if (res.meta.status !== 200) return this.$message.error('登录失败')
         this.$message({
           message: '登录成功',
