@@ -28,12 +28,12 @@
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="250px">
             <template slot-scope="scope">
               <el-button type="primary" icon="el-icon-edit" size="mini" @click="showeditDialog(scope.row.id)"></el-button>
               <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteUser(scope.row.id)"></el-button>
               <el-tooltip class="item" effect="dark" content="设置权限" placement="top" :enterable="false">
-                <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+                <el-button type="warning" icon="el-icon-setting" size="mini" @click="showRightDialog(scope.row)"></el-button>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -83,6 +83,25 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="commitEditUser">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="分配角色" :visible.sync="rightDialogVisible" width="50%" @close="closeRightDialog">
+      <div>
+        <p>用户名称：{{currentUserRightDialog.username}}</p>
+        <p>当前角色：{{currentUserRightDialog.role_name}}</p>
+        <p>请选择新角色：</p>
+        <el-select v-model="selectValue" placeholder="请选择">
+          <el-option
+            v-for="item in rolesList"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="rightDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="commitRightDialog">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -153,7 +172,11 @@ export default {
           { required: true, message: '请输入用户名称', trigger: 'blur' },
           { validator: checkMobile, trigger: 'blur' }
         ]
-      }
+      },
+      rightDialogVisible: false,
+      currentUserRightDialog: {},
+      rolesList: [],
+      selectValue: ''
     }
   },
   created () {
@@ -236,13 +259,28 @@ export default {
       if (re.meta.status !== 200) return this.$message.error('用户删除失败')
       this.$message.success('用户删除成功')
       this.getUserList()
+    },
+    async showRightDialog (user) {
+      this.currentUserRightDialog = user
+      const { data: res } = await this.$http.get('roles')
+      if (res.meta.status !== 200) return this.$message.error('角色数据获取失败')
+      this.rolesList = res.data
+      this.rightDialogVisible = true
+    },
+    closeRightDialog () {
+      this.selectValue = ''
+    },
+    async commitRightDialog () {
+      const { data: res } = await this.$http.put(`users/${this.currentUserRightDialog.id}/role`, { rid: this.selectValue })
+      if (res.meta.status !== 200) return this.$message.error('角色更换失败')
+      this.$message.success('角色更新成功')
+      this.getUserList()
+      this.rightDialogVisible = false
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-  .el-table {
-    margin-top: 15px;
-  }
+
 </style>
