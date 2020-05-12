@@ -187,7 +187,6 @@ export default {
         item.inputVisible = false
         item.inputValue = ''
       })
-      console.log(res)
       if (this.activeName === 'many') this.manyParamsList = res.data
       if (this.activeName === 'only') this.onlyParamsList = res.data
     },
@@ -262,7 +261,6 @@ export default {
         row.inputVisible = false
       } else {
         row.attr_vals.push(row.inputValue.trim())
-        console.log(row.attr_vals)
         row.inputVisible = false
         row.inputValue = ''
         const { data: res } = await this.$http.put(`categories/${this.cateID}/attributes/${row.attr_id}`, {
@@ -276,7 +274,6 @@ export default {
     },
     showInput (row) {
       row.inputVisible = true
-      console.log(this)
       this.$nextTick(_ => {
         this.$refs.saveTagInput.$refs.input.focus()
       })

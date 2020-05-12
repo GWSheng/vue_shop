@@ -25,7 +25,7 @@ Vue.filter('timeHandle', time => {
   const h = date.getHours().toString().padStart(2, '0')
   const mm = date.getMinutes().toString().padStart(2, '0')
   const ss = date.getSeconds().toString().padStart(2, '0')
-  return `${y}-${m}-${d} ${h}-${mm}-${ss}`
+  return `${y}-${m}-${d} ${h}:${mm}:${ss}`
 })
 
 new Vue({
