@@ -1,16 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../components/Login.vue'
-import Home from '../components/Home.vue'
-import Welcome from '../components/Welcome.vue'
 import Users from '../components/User/Users.vue'
 import Rights from '../components/Rights'
 import Role from '../components/Role'
 import Params from '../components/goods/Params'
 import List from '../components/goods/List'
 import AddGoods from '../components/goods/AddGoods'
+import Category from '../components/goods/Category'
 import Order from '../components/Order'
 import Report from '../components/Report'
+const Login = () => import(/* webpackChunkName:'login_home_welcom' */ '../components/Login.vue')
+// 按需加载路由，路由懒加载，使用插件@babel/plugin-suntax-dynamic-import 在bable-config.js中配置，
+// const Login = () => import(/* webpackChunkName:'login_home_welcom' */ '../components/Login.vue')
+// 使用这种方式导入路由， /* webpackChunkName:'login_home_welcom' */  路由分组，指定将某几个组件打包到这个文件中
+// '../components/Login.vue' 具体的组件的路径
+const Home = () => import(/* webpackChunkName:'login_home_welcom' */ '../components/Home.vue')
+const Welcome = () => import(/* webpackChunkName:'login_home_welcom' */ '../components/Welcome.vue')
 
 Vue.use(VueRouter)
 
@@ -28,6 +33,7 @@ const routes = [
       { path: '/roles', component: Role },
       { path: '/params', component: Params },
       { path: '/goods', component: List },
+      { path: '/categories', component: Category },
       { path: '/goods/addGoods', component: AddGoods },
       { path: '/orders', component: Order },
       { path: '/reports', component: Report }
